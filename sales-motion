@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shaping Demand — Foresight-Driven Agentic Sales Motion</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#ffffff; --ink:#10201d; --muted:#5d7071; --line:#e6eeeb;
+--deep:#0b352c; --deep2:#0f4438; --accent:#00cf83; --accent-dark:#0aa06a;
+--mint:#e7faf1; --teal:#129686; --card:#ffffff; --soft:#f6faf8;
+--shadow:0 10px 30px rgba(11,53,44,.08); --shadow-hover:0 18px 48px rgba(11,53,44,.14);
+--radius:20px;
+}
+body{font-family:Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.topbar{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:20;backdrop-filter:blur(10px)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo{font-weight:800;letter-spacing:-.02em;font-size:22px;color:var(--deep)} .logo span{color:var(--accent-dark)}
+.pill{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--deep);color:#fff;padding:8px 14px;border-radius:100px}
+.hero{padding:56px 0 18px;text-align:left}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);background:var(--mint);border:1px solid #c9efe0;padding:7px 14px;border-radius:100px;margin-bottom:18px}
+.eyebrow i{width:8px;height:8px;background:var(--accent);border-radius:50%;display:inline-block;box-shadow:0 0 0 5px rgba(0,207,131,.15)}
+h1{font-size:clamp(32px,5vw,56px);line-height:1.02;letter-spacing:-.04em;color:var(--deep);max-width:900px}
+h1 em{font-style:normal;color:var(--accent-dark);position:relative}
+.sub{margin-top:16px;font-size:18px;color:var(--muted);max-width:800px} .sub strong{color:var(--ink)}
+.hypo{margin:22px 0 8px;background:var(--deep);color:#eafff5;border-radius:16px;padding:18px 20px;display:flex;gap:16px;align-items:flex-start}
+.hypo b{color:#fff} .hypo .q{font-size:28px;line-height:1;color:var(--accent)} .hypo p{font-size:15.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0 8px}
+.mini{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.mini h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.mini p{font-size:14.5px;color:#2a3f3c} .mini.today{border-left:5px solid #cbd5d3} .mini.future{border-left:5px solid var(--accent);background:#fff;box-shadow:var(--shadow)}
+.pipeline-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:36px 0 18px;flex-wrap:wrap}
+.pipeline-head h2{font-size:28px;letter-spacing:-.03em;color:var(--deep)} .pipeline-head p{color:var(--muted);max-width:640px}
+.steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.steps:before{content:"";position:absolute;top:34px;left:20px;right:20px;height:3px;background:linear-gradient(90deg,var(--accent) 0 75%,#e2ecea 75% 100%);border-radius:10px;z-index:0}
+.card{position:relative;z-index:1;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:.25s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+.card-top{height:6px;background:var(--c,var(--accent))}
+.card-body{padding:22px 20px 18px}
+.num{width:52px;height:52px;border-radius:14px;background:var(--deep);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;margin-bottom:14px;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.card:nth-child(2) .num{background:#134e40} .card:nth-child(3) .num{background:#0e6b57} .card:nth-child(4) .num{background:#00a76a}
+.phase{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.card h3{font-size:20px;letter-spacing:-.02em;margin:6px 0;color:var(--deep);line-height:1.2}
+.tag{font-size:13px;font-weight:700;color:var(--deep2);background:var(--mint);display:inline-block;padding:5px 10px;border-radius:100px;margin:8px 0 10px;border:1px solid #c9efe0}
+.short{font-size:14.5px;color:#334744}
+.meta{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}
+.meta span{font-size:12px;font-weight:700;background:#f1f6f4;border:1px solid var(--line);padding:5px 10px;border-radius:100px;color:#334744}
+.detail{display:none;border-top:1px dashed #cfe3dc;background:#fcfffe;padding:18px 20px 20px}
+.card.open .detail{display:block;animation:fade .3s ease}
+.detail h5{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dark);margin:14px 0 6px} .detail h5:first-child{margin-top:0}
+.detail ul{margin-left:18px;font-size:14px;color:#2f4441} .detail li{margin:5px 0} .detail li::marker{color:var(--accent-dark)}
+.proof{background:var(--deep);color:#d8fff0;border-radius:12px;padding:12px 14px;font-size:13.5px;margin-top:14px}
+.proof strong{color:#fff}
+.toggle{margin:16px 20px 20px;margin-top:auto;padding-top:16px}
+.btn{width:100%;cursor:pointer;border:1px solid var(--deep);background:#fff;color:var(--deep);font-weight:800;font-size:14px;padding:12px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn:hover{background:var(--deep);color:#fff} .card.open .btn{background:var(--deep);color:#fff}
+.btn .plus{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#06382b;display:inline-flex;align-items:center;justify-content:center;font-weight:900;transition:.25s}
+.card.open .plus{transform:rotate(45deg)}
+.valuebar{margin:28px 0;display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.values{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow)}
+.values h4,.metrics h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.values ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px} .values li{font-size:14.5px;display:flex;gap:8px} .values li:before{content:"✓";color:#fff;background:var(--accent-dark);width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:2px}
+.metrics{background:var(--deep);color:#fff;border-radius:16px;padding:20px 22px}
+.metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.m{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:12px} .m b{font-size:24px;display:block;letter-spacing:-.02em} .m span{font-size:12.5px;color:#b9d9cd}
+.human{margin:8px 0 10px;font-size:13.5px;background:#fff8e6;border:1px solid #f0d48a;border-radius:12px;padding:12px 14px;color:#5a4a1a}
+footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 0 30px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@keyframes fade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media(max-width:980px){.steps{grid-template-columns:1fr}.steps:before{display:none}.grid2,.valuebar{grid-template-columns:1fr}.values ul{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap topbar-inner"><div class="logo">vivicta<span>*</span></div><div class="pill">Foresight-Driven Agentic Sales Motion</div></div></div>
+<div class="wrap">
+<div class="hero">
+<div class="eyebrow"><i></i> Jori Eskolin — 4.9.2026 • Shaping Demand</div>
+<h1>SHAPING DEMAND: <em>finding new customers</em> — and enabling evolving loyalty.</h1>
+<p class="sub">Operate <strong>UPSTREAM — before demand becomes an RFP</strong> we have to react to. Systematically turn external change, weak signals, customer context, capability & capacity into timely engagement. <strong>Click any phase for the deep-dive.</strong></p>
+<div class="hypo"><div class="q">“</div><p><b>Hypothesis:</b> Siloed speed and efficiency create local efficiency. Upstream operation creates market-shaping advantage. Shaping demand means helping customers recognize and act on an emerging, evidence-supported need <b>before it becomes formal procurement</b> — not manufacturing artificial demand.</p></div>
+<div class="grid2">
+<div class="mini today"><h4>Today — Reactive</h4><p>Signal stays in a report. Sales doesn’t connect it to an account. Customer specs alone. We wait for RFP and compete on <b>price + delivery</b>.</p></div>
+<div class="mini future"><h4>Proposed Future — Proactive</h4><p>Same signal → connected to exposure, market pressure, vulnerability, capabilities & references. Sales gets <b>Buying Insight & Hypothesis + Proactive Proposal</b> before spec exists.</p></div>
+</div>
+<div class="pipeline-head">
+<div><h2>Modular Sales Motion: from Sensing → Customer Value</h2><p>Four phases, five engines + Impact Opportunity Platform. Each module works alone (horizontal value) and as an automatic pipeline (vertical value). Free-capacity can also trigger creation.</p></div>
+</div>
+<div class="steps" id="steps">
+<!-- PHASE 1 -->
+<article class="card" style="--c:#00cf83">
+<div class="card-top"></div><div class="card-body">
+<div class="num">01</div><div class="phase">Phase 1 • Opportunity Sensing</div>
+<h3>Scanner scans Domain / Signal / Market</h3>
+<div class="tag">SCANNER • Left of the named need</div>
+<p class="short">Continuous scan of <b>30 megatrends + org health</b> across hundreds of accounts. Catches weak signals before they become briefs.</p>
+<div class="meta"><span>Weak signals</span><span>30 Megatrends</span><span>New logos</span></div>
+</div>
+<div class="detail">
+<h5>Objective</h5><ul><li>Engage before customer has fully recognized need — create new demand.</li><li>Make foresight ownable for Sales.</li></ul>
+<h5>How it works</h5><ul><li>Domain / Signal / Market scan + org health scoring.</li><li>Future Demand Analysis + Market Intelligence.</li><li>Free-capacity trigger: when utilization falls, auto-scan for fits.</li></ul>
+<h5>Key outputs</h5><ul><li>Weak signals + prioritized account list.</li><li>Input to <b>Buying Insight & Hypothesis</b>: Foresight Knowledge + Company Summary + Market Pressure.</li><li>Sample: <b>01 SENSING: Future Demand Analysis</b></li></ul>
+<div class="proof"><strong>Solves disconnect:</strong> Foresight sees change but owns no customers • Weak signals never surface via account management.</div>
+</div>
+<div class="toggle"><button class="btn" aria-expanded="false"><span class="plus">+</span><span class="lbl">View detailed view</span></button></div>
+</article>
+<!-- PHASE 2 -->
+<article class="card" style="--c:#0ea5a0">
+<div class="card-top"></div><div class="card-body">
+<div class="num">02</div><div class="phase">Phase 2 • Structural Diagnosis</div>
+<h3>Diagnostic Engine links exposure / vulnerability</h3>
+<div class="tag">DIAGNOSTIC ENGINE • Quantify risk</div>
+<p class="short">Maps customer assets & processes to risk. What breaks if directive X changes? Quantifies operational exposure.</p>
+<div class="meta"><span>Exposure map</span><span>AI Governance</span><span>FinOps</span></div>
+</div>
+<div class="detail">
+<h5>Objective</h5><ul><li>Turn generic signal into customer-specific <b>why-act-now</b>.</li><li>Give Sales evidence, not claims.</li></ul>
+<h5>How it works</h5><ul><li>Link regulation / market pressure to processes, data, assets.</li><li>Evidence-gated cognitive model — constrained / question-led if evidence thin.</li><li>Risk quantification + vulnerability scoring.</li></ul>
+<h5>Key outputs</h5><ul><li>Exposure & vulnerability map.</li><li>AI Governance Status, Market Pressure Analysis, Adaptability check.</li><li>Sample: <b>02 DIAGNOSIS: AI Governance Status / FinOps Engine</b></li></ul>
+<div class="proof"><strong>Solves disconnect:</strong> Sales owns customers but misses structural shifts • Service dev has capabilities but doesn’t know where demand emerges.</div>
+</div>
+<div class="toggle"><button class="btn" aria-expanded="false"><span class="plus">+</span><span class="lbl">View detailed view</span></button></div>
+</article>
+<!-- PHASE 3 -->
+<article class="card" style="--c:#0b352c">
+<div class="card-top"></div><div class="card-body">
+<div class="num">03</div><div class="phase">Phase 3 • Solution Architecture</div>
+<h3>Simulator tests capability / capacity</h3>
+<div class="tag">SIMULATOR + PROPOSAL • Co-create</div>
+<p class="short">Co-creates what-good-looks-like roadmap with customer. Simulates delivery, team, ROI timeline + drafts proactive proposal.</p>
+<div class="meta"><span>Roadmap</span><span>ROI sim</span><span>Proactive Proposal</span></div>
+</div>
+<div class="detail">
+<h5>Objective</h5><ul><li>Funnel customer + internal dev leads into pipeline <b>before spec exists</b>.</li><li>Make our capabilities the natural next step.</li></ul>
+<h5>How it works</h5><ul><li>Scenario simulation: delivery options, team composition, capacity fit.</li><li>Draft <b>Buying Insight & Hypothesis → Proactive Proposal</b> (e.g. Sisu Auto).</li><li>Human validation gate: Service Owners + Sales own narrative.</li></ul>
+<h5>Key outputs</h5><ul><li>Co-created roadmap + ROI timeline.</li><li>Evidence pack + draft proposal outline.</li><li>Sample: <b>03 SIMULATOR: Summarize & RoadMap</b></li></ul>
+<div class="proof"><strong>Solves disconnect:</strong> Delivery has capacity info but doesn’t shape pipeline • No shared win/loss learning. Zero human intervention from Signal → <i>draft</i>, human decides send.</div>
+</div>
+<div class="toggle"><button class="btn" aria-expanded="false"><span class="plus">+</span><span class="lbl">View detailed view</span></button></div>
+</article>
+<!-- PHASE 4 -->
+<article class="card" style="--c:#06382b">
+<div class="card-top"></div><div class="card-body">
+<div class="num">04</div><div class="phase">Phase 4 • Value Finalization</div>
+<h3>Proposal + RFP Orchestrator</h3>
+<div class="tag">RFP ORCHESTRATOR + PLATFORM • Close</div>
+<p class="short">Generates evidence pack & final offer in <b>&lt;2 business days</b>. When tender emerges — orchestrates &gt;95% first-time-right response.</p>
+<div class="meta"><span>&lt;2 days</span><span>&gt;95% FTR</span><span>Impact Platform</span></div>
+</div>
+<div class="detail">
+<h5>Objective</h5><ul><li>Close with excellence — faster, more accurate, higher win-rate.</li><li>Pull planning: demand creation + capacity + service areas as one system.</li></ul>
+<h5>How it works</h5><ul><li>RFP Orchestrator assembles evidence, references, pricing, compliance.</li><li>Impact Opportunity Platform routes PULL / PUSH, GO/NOGO.</li><li>Proposal never sent without human validation.</li></ul>
+<h5>Real case proof — Nordic IT consultancy 500+ / €100M+</h5><ul><li>-70% Request-to-Offer, +50% Winning ratio, +35% NPS</li><li>under 2d Strategic Validation Loop, 90% Utilisation, +20% Net profit (3%→15%)</li></ul>
+<div class="proof"><strong>Solves disconnect:</strong> Proposal teams respond late under tight schedules. Now: validated proposal from <b>several days → &lt;2 days</b>.</div>
+</div>
+<div class="toggle"><button class="btn" aria-expanded="false"><span class="plus">+</span><span class="lbl">View detailed view</span></button></div>
+</article>
+</div>
+<div class="valuebar">
+<div class="values"><h4>Key deliverables for customers</h4><ul><li>Earlier visibility into emerging risks</li><li>Better quality of strategic options</li><li>More time to respond</li><li>Better alignment investment → outcomes</li><li>Evidence-backed recommendations</li><li>Evolving loyalty, not one-off sale</li></ul>
+<div class="human">🔒 <b>Customer Gate:</b> proposal is never sent without human validation — Service Owners + Sales own narrative and decisions. Implementation module-by-module: 2 domains × 10 accounts × 90 days, CRM read-only first. Success: Signal→Validation &lt;2d, signal-triggered ratio &gt;25% → &gt;50% in 18mo.</div>
+</div>
+<div class="metrics"><h4 style="color:#7ef0c1">Proven impact — freedom-to-choose case</h4><p style="font-size:14px;color:#cde9dd">Holistic system outcome, not AI alone. Numbers from combined Demand Creation + pull Capacity + Service Areas + Platform.</p><div class="metrics-grid"><div class="m"><b>−70%</b><span>Request-to-Offer time</span></div><div class="m"><b>+50%</b><span>Winning ratio</span></div><div class="m"><b>+35%</b><span>NPS improvement</span></div><div class="m"><b>under 2d</b><span>Validation Loop</span></div><div class="m"><b>90%</b><span>Utilisation</span></div><div class="m"><b>+20%</b><span>Net profit (3% → 15%)</span></div></div></div>
+</div>
+<footer><div>Jori Eskolin — 4.9.2026 • Buying Insight & Hypothesis = Foresight + Company Summary + Market Pressure + Evidence-gated model + Weak signals</div><div>vivicta* • Efficacy is the point: shape demand, enable evolving CX</div></footer>
+</div>
+<script>
+document.querySelectorAll('.card .btn').forEach(b=>{
+b.addEventListener('click',()=>{
+const c=b.closest('.card'); const open=c.classList.toggle('open');
+b.setAttribute('aria-expanded',open);
+b.querySelector('.lbl').textContent=open?'Close detailed view':'View detailed view';
+if(open){c.scrollIntoView({behavior:'smooth',block:'nearest'})}
+})
+});
+document.querySelectorAll('.card-body').forEach(body=>{
+body.style.cursor='pointer';
+body.addEventListener('click',(e)=>{
+if(e.target.closest('.btn'))return;
+body.parentElement.querySelector('.btn').click();
+})
+});
+</script>
+</body>
+</html>
