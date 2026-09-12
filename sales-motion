@@ -162,7 +162,7 @@ footer{border-top:1px solid var(--line);margin-top:26px;padding:18px 0 30px;colo
 </div>
 <div class="metrics"><h4 style="color:#7ef0c1">Proven impact — freedom-to-choose case</h4><p style="font-size:14px;color:#cde9dd">Holistic system outcome, not AI alone. Numbers from combined Demand Creation + pull Capacity + Service Areas + Platform.</p><div class="metrics-grid"><div class="m"><b>−70%</b><span>Request-to-Offer time</span></div><div class="m"><b>+50%</b><span>Winning ratio</span></div><div class="m"><b>+35%</b><span>NPS improvement</span></div><div class="m"><b>under 2d</b><span>Validation Loop</span></div><div class="m"><b>90%</b><span>Utilisation</span></div><div class="m"><b>+20%</b><span>Net profit (3% → 15%)</span></div></div></div>
 </div>
-<footer><div>Jori Eskolin — 4.9.2026 • Buying Insight & Hypothesis = Foresight + Company Summary + Market Pressure + Evidence-gated model + Weak signals</div><div>*Sales Motion* • Efficacy is the point: shape demand, enable evolving CX</div></footer>
+<footer><div>Jori Eskolin — 4.9.2026 • Buying Insight & Hypothesis = Foresight + Company Summary + Market Pressure + Evidence-gated model + Weak signals</div><div>Efficacy is the point: shape demand, enable evolving CX</div></footer>
 </div>
 <script>
 document.querySelectorAll('.card .btn').forEach(b=>{
