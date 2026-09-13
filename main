@@ -1,53 +1,114 @@
-import os
-import requests
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From World to Value - System Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef2f7;font-family:'Inter',system-ui,sans-serif;color:#0f172a;display:flex;justify-content:center;padding:32px 16px}
+.canvas{max-width:920px;width:100%;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(15,23,42,.15);border:1px solid #e2e8f0}
+.hero{background:#0b1226;color:#fff;padding:36px 40px 28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 300px at 90% 0%,#3b82f6 0%,transparent 60%),radial-gradient(500px 300px at 0% 100%,#22c55e 0%,transparent 55%);opacity:.35}
+.hero-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.badge{font-size:11px;letter-spacing:.18em;font-weight:800;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 12px;border-radius:999px}
+.hero h1{font-size:38px;line-height:1.05;font-weight:900;margin:16px 0 10px;position:relative;z-index:2}
+.hero h1 span{background:linear-gradient(90deg,#93c5fd,#86efac);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#cbd5e1;max-width:620px;line-height:1.6;font-size:15px;position:relative;z-index:2}
+.flow{padding:28px 28px 28px;position:relative;background:linear-gradient(#f8fafc,#fff)}
+.rail{position:absolute;left:56px;top:30px;bottom:30px;width:3px;background:#e2e8f0;border-radius:99px}
+.card{position:relative;z-index:2;background:#fff;border:1px solid #e2e8f0;border-radius:20px;margin:0 0 0 64px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.card-head{display:flex;align-items:center;gap:14px;padding:14px 18px;color:#0f172a;font-weight:900;letter-spacing:.08em}
+.num{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:14px;color:#fff;flex-shrink:0}
+.card-body{padding:18px 20px 20px}
+.card-desc{font-size:14px;line-height:1.6;color:#475569;margin-bottom:14px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:99px}
+.world .card-head{background:#dbeafe;border-bottom:1px solid #bfdbfe}
+.world .num{background:#2563eb}
+.world .dot{background:#3b82f6}
+.needs .card-head{background:#dcfce7;border-bottom:1px solid #bbf7d0}
+.needs .num{background:#16a34a}
+.needs .dot{background:#22c55e}
+.org .card-head{background:#e7e9d5;border-bottom:1px solid #d6d9b8}
+.org .num{background:#4d5a2a}
+.org .dot{background:#75833f}
+.value .card-head{background:#2563eb;color:#fff}
+.value .num{background:#fff;color:#2563eb}
+.org-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}
+.mini{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:12px}
+.mini h4{font-size:11px;letter-spacing:.12em;color:#64748b;margin-bottom:10px}
+.connector{margin:0 0 0 64px;position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:10px 6px}
+.line{flex:1;display:flex;align-items:center;gap:10px}
+.line::before{content:'';flex:1;height:2px;background:repeating-linear-gradient(90deg,#94a3b8 0 8px,transparent 8px 14px)}
+.arrow{width:36px;height:36px;border-radius:99px;background:#0f172a;color:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.conn-label{font-size:11.5px;font-weight:800;letter-spacing:.12em;color:#fff;background:#0f172a;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.conn-sub{font-size:12px;color:#64748b;font-weight:500}
+.loop-note{margin:0 0 0 64px;background:#0f172a;color:#e2e8f0;border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:13px;position:relative;z-index:2}
+.loop-note b{color:#fff}
+.footer{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12.5px;color:#64748b}
+.footer strong{color:#0f172a}
+@media(max-width:700px){.org-grid{grid-template-columns:1fr}.hero h1{font-size:28px}.rail{left:24px}.card,.connector,.loop-note{margin-left:32px}.flow{padding:18px}}
+</style>
+</head>
+<body>
+<div class="canvas">
+<div class="hero">
+<div class="hero-top"><div class="badge">SYSTEMS THINKING • OUTSIDE-IN</div><div class="badge">◍ REGENERATIVE LOOP</div></div>
+<h1>From <span>WORLD</span> to VALUE.</h1>
+<p>Organizations don't create value in isolation. They sense planetary context, translate it into human needs, organize capabilities, and return value to the world.</p>
+</div>
 
-api_key = os.environ.get("MODEL_API_KEY")
-url = "https://api.meta.ai/v1/responses"
+<div class="flow"><div class="rail"></div>
 
-headers = {
-  "Authorization": f"Bearer {api_key}",
-  "Content-Type": "application/json",
-}
+<!-- 01 -->
+<div class="card world">
+<div class="card-head"><div class="num">01</div> THE WORLD — CONTEXT WE INHERIT</div>
+<div class="card-body">
+<div class="card-desc">You don't control this layer. Climate, resources, politics and values set the playing field. Strategy starts by <b>listening</b>.</div>
+<div class="tags">
+<span class="tag"><span class="dot"></span>Planet</span><span class="tag"><span class="dot"></span>Resources</span><span class="tag"><span class="dot"></span>Pollution</span><span class="tag"><span class="dot"></span>Climate</span><span class="tag"><span class="dot"></span>Values</span><span class="tag"><span class="dot"></span>Sustainability</span><span class="tag"><span class="dot"></span>Politics</span><span class="tag"><span class="dot"></span>Human Rights</span><span class="tag"><span class="dot"></span>Megatrends</span><span class="tag"><span class="dot"></span>Social Responsibility</span><span class="tag"><span class="dot"></span>Nature</span><span class="tag"><span class="dot"></span>Future</span><span class="tag"><span class="dot"></span>Society</span>
+</div></div></div>
 
-payload = {
-  "model": "muse-spark-1.3-contributor",
-  "input": [
-    {
-      "content": [
-        {
-          "text": "Analyze this picture. Think especially the story of this picture - and the create cool, modern, professional HTML picture from this.",
-          "type": "input_text"
-        },
-        {
-          "image_url": "file-1766233054620688",
-          "type": "input_image"
-        }
-      ],
-      "role": "user",
-      "type": "message"
-    },
-    {
-      "content": [
-        {
-          "text": "### The Story in Your Sketch\n\nThis is not an org-chart. It's a **systems-loop for value creation**:\n\n**1. THE WORLD (top) - The Context**\nPlanet, Climate, Resources, Pollution, Politics, Values, Sustainability, Human Rights, Megatrends, Society, Future, Nature, Social Responsibility.\nYou don't control this layer. It controls you. It's the outside-in starting point.\n\n**2. THE NEEDS & DESIRES - The Human Translator**\nBasic needs, Deep desires, Emergence, Wording, Individuals/Organizations, Customer Path.\nThe World creates tension. Humans feel it as needs. Good strategy listens here first.\n\n**3. THE ORGANIZATION - The Machine**\nValue Stream, Culture, Business Architecture, Organization, Solution Architecture, Business Model, Software Architecture, IT Infra, Platform/Machines.\nThis is how you *organize* to answer those needs. Culture + Business Design + Tech, together.\n\n**4. THE VALUE CREATION (bottom) - The Outcome**\nValue delivered back into the World.\n\nThe arrows are the key story:\n* World <-> Needs: constant sensing loop\n* Needs <-> Organization: dashed lines on both sides = continuous discovery / iterative co-creation, not waterfall\n* Needs -> Value Creation (grey line on left): the customer path goes straight through, everything must trace to value\n\nIn short: **Sense the World > Understand Humans > Design the Organization > Create Value that regenerates the World.**\n\nI rebuilt that as a clean, modern system visual:\n\n```html\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>From World to Value - System Map</title>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@600&display=swap\" rel=\"stylesheet\">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{background:#eef2f7;font-family:'Inter',system-ui,sans-serif;color:#0f172a;display:flex;justify-content:center;padding:32px 16px}\n.canvas{max-width:920px;width:100%;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(15,23,42,.15);border:1px solid #e2e8f0}\n.hero{background:#0b1226;color:#fff;padding:36px 40px 28px;position:relative;overflow:hidden}\n.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 300px at 90% 0%,#3b82f6 0%,transparent 60%),radial-gradient(500px 300px at 0% 100%,#22c55e 0%,transparent 55%);opacity:.35}\n.hero-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}\n.badge{font-size:11px;letter-spacing:.18em;font-weight:800;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:7px 12px;border-radius:999px}\n.hero h1{font-size:38px;line-height:1.05;font-weight:900;margin:16px 0 10px;position:relative;z-index:2}\n.hero h1 span{background:linear-gradient(90deg,#93c5fd,#86efac);-webkit-background-clip:text;background-clip:text;color:transparent}\n.hero p{color:#cbd5e1;max-width:620px;line-height:1.6;font-size:15px;position:relative;z-index:2}\n.flow{padding:28px 28px 28px;position:relative;background:linear-gradient(#f8fafc,#fff)}\n.rail{position:absolute;left:56px;top:30px;bottom:30px;width:3px;background:#e2e8f0;border-radius:99px}\n.card{position:relative;z-index:2;background:#fff;border:1px solid #e2e8f0;border-radius:20px;margin:0 0 0 64px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06)}\n.card-head{display:flex;align-items:center;gap:14px;padding:14px 18px;color:#0f172a;font-weight:900;letter-spacing:.08em}\n.num{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:14px;color:#fff;flex-shrink:0}\n.card-body{padding:18px 20px 20px}\n.card-desc{font-size:14px;line-height:1.6;color:#475569;margin-bottom:14px}\n.tags{display:flex;flex-wrap:wrap;gap:8px}\n.tag{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:#f8fafc;border:1px solid #e2e8f0;display:flex;align-items:center;gap:7px}\n.dot{width:7px;height:7px;border-radius:99px}\n.world .card-head{background:#dbeafe;border-bottom:1px solid #bfdbfe}\n.world .num{background:#2563eb}\n.world .dot{background:#3b82f6}\n.needs .card-head{background:#dcfce7;border-bottom:1px solid #bbf7d0}\n.needs .num{background:#16a34a}\n.needs .dot{background:#22c55e}\n.org .card-head{background:#e7e9d5;border-bottom:1px solid #d6d9b8}\n.org .num{background:#4d5a2a}\n.org .dot{background:#75833f}\n.value .card-head{background:#2563eb;color:#fff}\n.value .num{background:#fff;color:#2563eb}\n.org-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}\n.mini{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:12px}\n.mini h4{font-size:11px;letter-spacing:.12em;color:#64748b;margin-bottom:10px}\n.connector{margin:0 0 0 64px;position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:10px 6px}\n.line{flex:1;display:flex;align-items:center;gap:10px}\n.line::before{content:'';flex:1;height:2px;background:repeating-linear-gradient(90deg,#94a3b8 0 8px,transparent 8px 14px)}\n.arrow{width:36px;height:36px;border-radius:99px;background:#0f172a;color:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 6px 16px rgba(0,0,0,.2)}\n.conn-label{font-size:11.5px;font-weight:800;letter-spacing:.12em;color:#fff;background:#0f172a;padding:6px 11px;border-radius:999px;white-space:nowrap}\n.conn-sub{font-size:12px;color:#64748b;font-weight:500}\n.loop-note{margin:0 0 0 64px;background:#0f172a;color:#e2e8f0;border-radius:14px;padding:12px 16px;display:flex;gap:12px;align-items:center;font-size:13px;position:relative;z-index:2}\n.loop-note b{color:#fff}\n.footer{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;font-size:12.5px;color:#64748b}\n.footer strong{color:#0f172a}\n@media(max-width:700px){.org-grid{grid-template-columns:1fr}.hero h1{font-size:28px}.rail{left:24px}.card,.connector,.loop-note{margin-left:32px}.flow{padding:18px}}\n</style>\n</head>\n<body>\n<div class=\"canvas\">\n<div class=\"hero\">\n<div class=\"hero-top\"><div class=\"badge\">SYSTEMS THINKING • OUTSIDE-IN</div><div class=\"badge\">◍ REGENERATIVE LOOP</div></div>\n<h1>From <span>WORLD</span> to VALUE.</h1>\n<p>Organizations don't create value in isolation. They sense planetary context, translate it into human needs, organize capabilities, and return value to the world.</p>\n</div>\n\n<div class=\"flow\"><div class=\"rail\"></div>\n\n<!-- 01 -->\n<div class=\"card world\">\n<div class=\"card-head\"><div class=\"num\">01</div> THE WORLD — CONTEXT WE INHERIT</div>\n<div class=\"card-body\">\n<div class=\"card-desc\">You don't control this layer. Climate, resources, politics and values set the playing field. Strategy starts by <b>listening</b>.</div>\n<div class=\"tags\">\n<span class=\"tag\"><span class=\"dot\"></span>Planet</span><span class=\"tag\"><span class=\"dot\"></span>Resources</span><span class=\"tag\"><span class=\"dot\"></span>Pollution</span><span class=\"tag\"><span class=\"dot\"></span>Climate</span><span class=\"tag\"><span class=\"dot\"></span>Values</span><span class=\"tag\"><span class=\"dot\"></span>Sustainability</span><span class=\"tag\"><span class=\"dot\"></span>Politics</span><span class=\"tag\"><span class=\"dot\"></span>Human Rights</span><span class=\"tag\"><span class=\"dot\"></span>Megatrends</span><span class=\"tag\"><span class=\"dot\"></span>Social Responsibility</span><span class=\"tag\"><span class=\"dot\"></span>Nature</span><span class=\"tag\"><span class=\"dot\"></span>Future</span><span class=\"tag\"><span class=\"dot\"></span>Society</span>\n</div></div></div>\n\n<div class=\"connector\"><div class=\"arrow\">↓</div><div class=\"conn-label\">SENSE ↓</div><div class=\"conn-sub\">World signals shape human needs • ↻ continuous feedback</div><div class=\"line\"></div></div>\n\n<!-- 02 -->\n<div class=\"card needs\">\n<div class=\"card-head\"><div class=\"num\">02</div> THE NEEDS & DESIRES — HUMAN CORE</div>\n<div class=\"card-body\">\n<div class=\"card-desc\">Translate world noise into clear human jobs. Basic needs + deep desires of individuals & organizations along the <b>Customer Path</b>.</div>\n<div class=\"tags\">\n<span class=\"tag\"><span class=\"dot\"></span>Basic Needs</span><span class=\"tag\"><span class=\"dot\"></span>Deep Desires</span><span class=\"tag\"><span class=\"dot\"></span>Emergence</span><span class=\"tag\"><span class=\"dot\"></span>Wording</span><span class=\"tag\"><span class=\"dot\"></span>Individuals / Organizations</span><span class=\"tag\" style=\"background:#16a34a;color:#fff;border-color:#16a34a\">✦ Customer Path</span>\n</div></div></div>\n\n<div class=\"loop-note\">⇄ <div><b>Iterative Co-Creation Loop —</b> Needs ↔ Organization constantly inform each other. No waterfall. Discover, prototype, learn.</div></div>\n\n<div class=\"connector\"><div class=\"arrow\">↓</div><div class=\"conn-label\">DEFINE ↓</div><div class=\"conn-sub\">Needs pull capabilities from the organization</div><div class=\"line\"></div></div>\n\n<!-- 03 -->\n<div class=\"card org\">\n<div class=\"card-head\"><div class=\"num\">03</div> THE ORGANIZATION — CAPABILITY SYSTEM</div>\n<div class=\"card-body\">\n<div class=\"card-desc\">How you organize to deliver. Align flow, structure and technology to one value stream.</div>\n<div class=\"org-grid\">\n<div class=\"mini\"><h4>FLOW & CULTURE</h4><div class=\"tags\"><span class=\"tag\"><span class=\"dot\"></span>Value Stream</span><span class=\"tag\"><span class=\"dot\"></span>Culture</span></div></div>\n<div class=\"mini\"><h4>BUSINESS DESIGN</h4><div class=\"tags\"><span class=\"tag\"><span class=\"dot\"></span>Business Architecture</span><span class=\"tag\"><span class=\"dot\"></span>Organization</span><span class=\"tag\"><span class=\"dot\"></span>Business Model</span></div></div>\n<div class=\"mini\"><h4>TECH EXECUTION</h4><div class=\"tags\"><span class=\"tag\"><span class=\"dot\"></span>Solution Architecture</span><span class=\"tag\"><span class=\"dot\"></span>Software Architecture</span><span class=\"tag\"><span class=\"dot\"></span>IT Infra</span><span class=\"tag\"><span class=\"dot\"></span>Platform / Machines</span></div></div>\n</div></div></div>\n\n<div class=\"connector\"><div class=\"arrow\">↓</div><div class=\"conn-label\">DELIVER ↓</div><div class=\"conn-sub\">Capabilities compound into outcomes</div><div class=\"line\"></div></div>\n\n<!-- 04 -->\n<div class=\"card value\">\n<div class=\"card-head\"><div class=\"num\">↗</div> THE VALUE CREATION — IMPACT RETURNED</div>\n<div class=\"card-body\" style=\"background:linear-gradient(135deg,#eff6ff,#f0fdf4)\">\n<div class=\"card-desc\" style=\"margin:0;color:#0f172a;font-weight:600\">Value that flows back to the World — socially, ecologically, economically regenerative. The loop closes: Value → reshapes The World → creates new Needs.</div>\n</div></div>\n\n</div>\n<div class=\"footer\"><div><strong>Sense → Understand → Organize → Create</strong> • Inspired by original hand sketch</div><div style=\"font-family:Caveat;font-size:20px;color:#0f172a\">outside-in, always.</div></div>\n</div>\n</body>\n</html>\n```\n\nCopy-paste that into any `.html` file — it's fully self-contained, responsive, and print-ready.",
-          "type": "output_text"
-        }
-      ],
-      "role": "assistant",
-      "type": "message"
-    }
-  ],
-  "stream": False,
-  "temperature": 0.52,
-  "max_output_tokens": 32000,
-  "top_p": 1,
-  "reasoning": {"effort": "high"},
-}
+<div class="connector"><div class="arrow">↓</div><div class="conn-label">SENSE ↓</div><div class="conn-sub">World signals shape human needs • ↻ continuous feedback</div><div class="line"></div></div>
 
-response = requests.post(
-  url,
-  headers=headers,
-  json=payload,
-)
+<!-- 02 -->
+<div class="card needs">
+<div class="card-head"><div class="num">02</div> THE NEEDS & DESIRES — HUMAN CORE</div>
+<div class="card-body">
+<div class="card-desc">Translate world noise into clear human jobs. Basic needs + deep desires of individuals & organizations along the <b>Customer Path</b>.</div>
+<div class="tags">
+<span class="tag"><span class="dot"></span>Basic Needs</span><span class="tag"><span class="dot"></span>Deep Desires</span><span class="tag"><span class="dot"></span>Emergence</span><span class="tag"><span class="dot"></span>Wording</span><span class="tag"><span class="dot"></span>Individuals / Organizations</span><span class="tag" style="background:#16a34a;color:#fff;border-color:#16a34a">✦ Customer Path</span>
+</div></div></div>
 
-print(response.json())
+<div class="loop-note">⇄ <div><b>Iterative Co-Creation Loop —</b> Needs ↔ Organization constantly inform each other. No waterfall. Discover, prototype, learn.</div></div>
+
+<div class="connector"><div class="arrow">↓</div><div class="conn-label">DEFINE ↓</div><div class="conn-sub">Needs pull capabilities from the organization</div><div class="line"></div></div>
+
+<!-- 03 -->
+<div class="card org">
+<div class="card-head"><div class="num">03</div> THE ORGANIZATION — CAPABILITY SYSTEM</div>
+<div class="card-body">
+<div class="card-desc">How you organize to deliver. Align flow, structure and technology to one value stream.</div>
+<div class="org-grid">
+<div class="mini"><h4>FLOW & CULTURE</h4><div class="tags"><span class="tag"><span class="dot"></span>Value Stream</span><span class="tag"><span class="dot"></span>Culture</span></div></div>
+<div class="mini"><h4>BUSINESS DESIGN</h4><div class="tags"><span class="tag"><span class="dot"></span>Business Architecture</span><span class="tag"><span class="dot"></span>Organization</span><span class="tag"><span class="dot"></span>Business Model</span></div></div>
+<div class="mini"><h4>TECH EXECUTION</h4><div class="tags"><span class="tag"><span class="dot"></span>Solution Architecture</span><span class="tag"><span class="dot"></span>Software Architecture</span><span class="tag"><span class="dot"></span>IT Infra</span><span class="tag"><span class="dot"></span>Platform / Machines</span></div></div>
+</div></div></div>
+
+<div class="connector"><div class="arrow">↓</div><div class="conn-label">DELIVER ↓</div><div class="conn-sub">Capabilities compound into outcomes</div><div class="line"></div></div>
+
+<!-- 04 -->
+<div class="card value">
+<div class="card-head"><div class="num">↗</div> THE VALUE CREATION — IMPACT RETURNED</div>
+<div class="card-body" style="background:linear-gradient(135deg,#eff6ff,#f0fdf4)">
+<div class="card-desc" style="margin:0;color:#0f172a;font-weight:600">Value that flows back to the World — socially, ecologically, economically regenerative. The loop closes: Value → reshapes The World → creates new Needs.</div>
+</div></div>
+
+</div>
+<div class="footer"><div><strong>Sense → Understand → Organize → Create</strong> • Inspired by original hand sketch</div><div style="font-family:Caveat;font-size:20px;color:#0f172a">outside-in, always.</div></div>
+</div>
+</body>
+</html>
